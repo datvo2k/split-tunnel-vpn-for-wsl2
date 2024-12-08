@@ -1,3 +1,6 @@
+<!--
+This file contains the VPN Setup Guide, which provides instructions on how to set up and configure a VPN.
+-->
 # VPN Setup Guide
 
 This guide will help you set up a VPN using Docker and Tinyproxy.
@@ -25,6 +28,7 @@ This guide will help you set up a VPN using Docker and Tinyproxy.
 
 - Ensure that the `tinyproxy.docker-compose.yml` file is correctly configured for your needs.
 - The `vpn_network` subnet can be adjusted if needed, but make sure it does not conflict with existing networks.
+- **Caution:** This project is intended for WSL2, not Linux OS.
 
 ## Check connect
 `curl -x "http://127.0.0.1:8888" "https://ifconfig.me/"`
