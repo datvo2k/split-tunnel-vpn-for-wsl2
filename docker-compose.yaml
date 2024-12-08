@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+    # squid-proxy:
+    #     build:
+    #         context: .
+    #         dockerfile: Dockerfile
+    #     container_name: squid-proxy
+    #     restart: unless-stopped
+    #     ports:
+    #         - "3128:3128"
+    #     networks:
+    #         - vpn_network
+
+    wireguard:
+        image: linuxserver/wireguard
+        container_name: wireguard-bkk
+        restart: unless-stopped
+        cap_add:
+            - NET_ADMIN
+            - SYS_MODULE
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Asia/Ho_Chi_Minh
+        networks:
+            default:
+                ipv4_address: 172.30.0.2
+        sysctls:
+            - net.ipv4.conf.all.src_valid_mark=1
+        volumes:
+            - ./config/wg0.conf:/config/wg0.conf
+            - /lib/modules:/lib/modules
+            - ./custom-init-scripts:/custom-cont-init.d:ro
+        ports:
+            - 51820:51820/udp
+
+networks:
+  default:
+    name: vpn_network
+    external: true
