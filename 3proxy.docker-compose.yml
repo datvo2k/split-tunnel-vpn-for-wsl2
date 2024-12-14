@@ -1,12 +1,12 @@
 version: "3.8"
 services:
-  tinyproxy-wireguard:
+  3proxy-wireguard:
     build:
       context: .
-      dockerfile: tinyproxy.Dockerfile
-    container_name: wireguard-bkk-tinyproxy
+      dockerfile: 3proxy.Dockerfile
+    container_name: wireguard-bkk-3proxy
     restart: unless-stopped
-    hostname: wireguard-bkk-tinyproxy
+    hostname: wireguard-bkk-3proxy
     environment:
       - PUID=1000
       - PGID=1000
@@ -16,19 +16,16 @@ services:
       - SYS_MODULE
     volumes:
       - ./config/wg0.conf:/config/wg0.conf
-      - ./config/tinyproxy.conf:/tinyproxy/tinyproxy.conf
-      - ./config/start-tinyproxy.sh:/start-tinyproxy.sh
-      - ./logs/tinyproxy/:/var/log/tinyproxy/:rw,cached
       - /lib/modules:/lib/modules
-      # - ./custom-init-scripts:/custom-cont-init.d:ro
+      - ./custom-init-scripts:/custom-cont-init.d:ro
     ports:
       - 62820:51820/udp
-      - 8888:8888/tcp
+      - 6667:6667
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
     networks:
       default:
-        ipv4_address: 172.30.0.4
+        ipv4_address: 172.30.0.5
 
 networks:
   default:
