@@ -1,1 +1,6 @@
-config/wg*.conf
+/main
+/wireproxy
+*.sw?
+/.idea
+.goreleaser.yml
+*.conf
