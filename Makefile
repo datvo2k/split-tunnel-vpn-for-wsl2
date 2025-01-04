@@ -18,7 +18,7 @@ clean:
 dockerrun:
 	docker build -t wireproxy .
 	docker network inspect wireguard >/dev/null 2>&1 || docker network create --subnet=172.20.0.0/16 wireguard
-	docker run -d -p 127.0.0.1:25345:25345 --name wireproxy --net wireguard --ip 172.20.0.2 -v /home/datvo/wiregruard/cl-san.conf:/etc/wireproxy/config/cl-san.conf wireproxy --config /etc/wireproxy/config/cl-san.conf
+	docker run -d -p 25345:25345 --name wireproxy --net wireguard --ip 172.20.0.2 -v /home/datvo/wiregruard/cl-san.conf:/etc/wireproxy/config/wg0.conf wireproxy --config /etc/wireproxy/config/wg0.conf
 .PHONY: dockerclean
 dockerclean:
 	docker stop wireproxy || true
