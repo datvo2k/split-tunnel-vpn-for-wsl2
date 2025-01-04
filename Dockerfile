@@ -1,5 +1,5 @@
 # Start by building the application.
-FROM docker.io/golang:1.21 as build
+FROM docker.io/golang:1.23 AS build
 
 WORKDIR /usr/src/wireproxy
 COPY . .
@@ -17,3 +17,5 @@ CMD [ "--config", "/etc/wireproxy/config" ]
 LABEL org.opencontainers.image.title="wireproxy"
 LABEL org.opencontainers.image.description="Wireguard client that exposes itself as a socks5 proxy"
 LABEL org.opencontainers.image.licenses="ISC"
+
+EXPOSE 25345
