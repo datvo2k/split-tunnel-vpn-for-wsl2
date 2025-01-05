@@ -1,32 +1,72 @@
 version: "3.8"
 
 services:
-  wireguard:
-    image: lscr.io/linuxserver/wireguard
-    container_name: wireguard
-    cap_add:
-      - NET_ADMIN
-      - SYS_MODULE
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Asia/Ho_Chi_Minh
-      # - PEERS=1
-      # - PEERDNS=auto
-    ports:
-      - "51820:51820/udp" 
-    volumes:
-      - custom-init-scripts/custom-script.sh:/custom-cont-init.d:ro
-      - /home/datvo/wiregruard/th-bkk.conf:/config/wg0.conf
-      - /lib/modules:/lib/modules
-    networks:
-      default:
-        ipv4_address: 172.20.0.50
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1
-    restart: unless-stopped
+    traefik:
+        image: traefik:v2.10
+        container_name: traefik
+        ports:
+            - 80:80
+            - 443:443
+            - 8080:8080
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./traefik/acme.json:/acme.json
+            - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+        networks:
+            default:
+                ipv4_address: 172.20.0.40
+        restart: unless-stopped
+
+    # pihole:
+    #     container_name: pihole
+    #     image: pihole/pihole:latest
+    #     ports:
+    #         - 53000:53/tcp
+    #         - 53000:53/udp
+    #         - 67000:67/udp
+    #         - 80000:80/tcp
+    #     environment:
+    #         - TZ=Asia/Ho_Chi_Minh
+    #     volumes:
+    #         - './etc-pihole:/etc/pihole'
+    #         - './etc-dnsmasq.d:/etc/dnsmasq.d'
+    #     cap_add:
+    #         - NET_ADMIN
+    #     restart: unless-stopped
+    #     networks:
+    #         default:
+    #             ipv4_address: 172.20.0.60
+
+    wireguard:
+        image: lscr.io/linuxserver/wireguard
+        container_name: wireguard
+        cap_add:
+            - NET_ADMIN
+            - SYS_MODULE
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Asia/Ho_Chi_Minh
+            # - PEERS=1
+            # - PEERDNS=auto
+        ports:
+            - 51820:51820/tcp
+        volumes:
+            - ./custom-init-scripts:/custom-cont-init.d:ro
+            - /home/datvo/wiregruard/th-bkk.conf:/config/wg0.conf
+            - /lib/modules:/lib/modules
+        networks:
+            default:
+                ipv4_address: 172.20.0.50
+        dns:
+            # - 1.1.1.1
+            # - 8.8.8.8
+            - 172.20.0.60
+        sysctls:
+            - net.ipv4.conf.all.src_valid_mark=1
+        restart: unless-stopped
 
 networks:
-  default:
-    name: wireguard
-    external: true
+    default:
+        name: wireguard
+        external: true
