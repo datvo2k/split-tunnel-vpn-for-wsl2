@@ -1,0 +1,17 @@
+services:
+  wireguard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: 3proxy-wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    devices:
+      - /dev/net/tun
+    privileged: true
+    volumes:
+      - ./wg0.conf:/etc/wireguard/wg0.conf
+    ports:
+      - "3128:3128"
+      - "1080:1080"
