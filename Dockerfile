@@ -1,7 +1,7 @@
 FROM debian:bullseye-slim AS builder
 
 # Install build dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y \
     build-essential \
     git \
     ca-certificates \
@@ -17,7 +17,7 @@ RUN git clone https://github.com/3proxy/3proxy.git . && \
 FROM debian:bullseye-slim
 
 # Install runtime dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y \
     openresolv \
     iproute2 \
     iptables \
