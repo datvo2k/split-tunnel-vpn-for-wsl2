@@ -33,10 +33,6 @@ COPY --from=builder /usr/src/3proxy/bin/ /usr/local/bin/
 RUN mkdir -p /etc/3proxy /var/log/3proxy && \
     chown -R nobody:nogroup /var/log/3proxy
 
-COPY patch-wireguard.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/patch-wireguard.sh && \
-    /usr/local/bin/patch-wireguard.sh
-
 # Copy configuration files
 COPY 3proxy.cfg /etc/3proxy/3proxy.cfg
 COPY entrypoint.sh /entrypoint.sh

@@ -1,9 +1,10 @@
 services:
-  wireguard:
+
+  wireguard-1:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: 3proxy-wireguard
+    container_name: 3proxy-wireguard-1
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -11,7 +12,35 @@ services:
       - /dev/net/tun
     privileged: true
     volumes:
-      - ./wg0.conf:/etc/wireguard/wg0.conf
+      - ./wg0.conf:/etc/wireguard/wg0.conf:ro
     ports:
-      - "3128:3128"
-      - "1080:1080"
+      - 3128:3128   #http
+      - 1080:1080   #socks5
+    networks:
+      default:
+        ipv4_address: 172.30.0.4
+
+  wireguard-2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: 3proxy-wireguard-2
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    devices:
+      - /dev/net/tun
+    privileged: true
+    volumes:
+      - ./wg1.conf:/etc/wireguard/wg0.conf:ro
+    ports:
+      - 3129:3128   #http
+      - 1081:1080   #socks5
+    networks:
+      default:
+        ipv4_address: 172.30.0.5
+
+networks:
+  default:
+    name: vpn_network
+    external: true
